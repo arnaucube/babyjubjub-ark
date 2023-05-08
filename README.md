@@ -1,11 +1,13 @@
-# babyjubjub-rs [![Crates.io](https://img.shields.io/crates/v/babyjubjub-rs.svg)](https://crates.io/crates/babyjubjub-rs) [![Test](https://github.com/arnaucube/babyjubjub-rs/workflows/Test/badge.svg)](https://github.com/arnaucube/babyjubjub-rs/actions?query=workflow%3ATest)
+# babyjubjub-ark [![Test](https://github.com/arnaucube/babyjubjub-ark/workflows/Test/badge.svg)](https://github.com/arnaucube/babyjubjub-ark/actions?query=workflow%3ATest)
+
+> **Note**: this repo is a fork from https://github.com/arnaucube/babyjubjub-rs , porting it to arkworks [ff](https://github.com/arkworks-rs/algebra/tree/master/ff).
 
 BabyJubJub elliptic curve implementation in Rust. A twisted edwards curve embedded in the curve of BN128/BN256.
 
 BabyJubJub curve explanation: https://medium.com/zokrates/efficient-ecc-in-zksnarks-using-zokrates-bd9ae37b8186
 
 Uses:
-- Poseidon hash function https://github.com/arnaucube/poseidon-rs
+- Poseidon hash function https://github.com/arnaucube/poseidon-ark
 
 Compatible with the BabyJubJub implementations in:
 - Go, from https://github.com/iden3/go-iden3-crypto
