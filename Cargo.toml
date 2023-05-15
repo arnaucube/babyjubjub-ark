@@ -22,6 +22,7 @@ poseidon-ark = { git = "https://github.com/arnaucube/poseidon-ark" }
 # num-traits = "0.2.8"
 blake-hash = {version="0.4.0", optional=true}
 blake = {version="2.0.1", optional=true}
+blake2 = { version = "0.10", optional=true}
 generic-array = "0.14"
 arrayref = "0.3.5"
 lazy_static = "1.4.0"
@@ -36,5 +37,7 @@ name = "bench_babyjubjub"
 harness = false
 
 [features]
-default = ["blake-hash"]
-aarch64 = ["blake"]
+default = ["blake-hash"] # compatible with circomlib
+aarch64 = ["blake"] # compatible with circomlib
+wasm = ["blake2"] # Warning: this feature is not compatible with the circomlib key generation (meaning that same secret keys will lead to different public keys. But the signatures are compatible with circomlib & circomlibjs.
+# wasm = ["blake-hash"]

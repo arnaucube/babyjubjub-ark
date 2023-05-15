@@ -15,10 +15,24 @@ use ark_std::{rand::Rng, UniformRand};
 use poseidon_ark::Poseidon;
 
 #[cfg(not(feature = "aarch64"))]
+#[cfg(not(feature = "wasm"))]
 use blake_hash::Digest; // compatible version with Blake used at circomlib
 
+#[cfg(not(feature = "wasm"))]
 #[cfg(feature = "aarch64")]
 extern crate blake; // compatible version with Blake used at circomlib
+
+#[cfg(not(feature = "aarch64"))]
+#[cfg(feature = "wasm")]
+extern crate blake2; // non-compatible version with Blake used at circomlib
+
+#[cfg(not(feature = "aarch64"))]
+#[cfg(feature = "wasm")]
+use blake2::digest::Digest;
+
+#[cfg(not(feature = "aarch64"))]
+#[cfg(feature = "wasm")]
+use blake2::Blake2b512;
 
 use generic_array::GenericArray;
 
@@ -229,16 +243,27 @@ pub fn test_bit(b: &[u8], i: usize) -> bool {
 // }
 
 #[cfg(not(feature = "aarch64"))]
+#[cfg(not(feature = "wasm"))]
 fn blh(b: &[u8]) -> Vec<u8> {
     let hash = blake_hash::Blake512::digest(b);
     hash.to_vec()
 }
 
+#[cfg(not(feature = "wasm"))]
 #[cfg(feature = "aarch64")]
 fn blh(b: &[u8]) -> Vec<u8> {
     let mut hash = [0; 64];
     blake::hash(512, b, &mut hash).unwrap();
     hash.to_vec()
+}
+
+#[cfg(not(feature = "aarch64"))]
+#[cfg(feature = "wasm")]
+fn blh(b: &[u8]) -> Vec<u8> {
+    // not-compatible with circomlib implementation, but using Blake2b
+    let mut hasher = Blake2b512::new();
+    hasher.update(b);
+    hasher.finalize().to_vec()
 }
 
 #[derive(Debug, Clone)]
@@ -347,8 +372,8 @@ impl PrivateKey {
         let mut s = self.scalar_key() * Fr::from(8_u8);
         // let hm_b = BigInt::parse_bytes(to_hex(&hm).as_bytes(), 16).unwrap();
         // let hm_b = BigInt::parse_bytes(&hm.into_bigint().to_bytes_be(), 16).unwrap();
-        let hm_b = Fr::from_le_bytes_mod_order(&hm.into_bigint().to_bytes_le());
-        s = hm_b * s;
+        let hm_Fr = Fr::from_le_bytes_mod_order(&hm.into_bigint().to_bytes_le());
+        s = hm_Fr * s;
         s = r + s;
         // s %= &SUBORDER.clone();
 
