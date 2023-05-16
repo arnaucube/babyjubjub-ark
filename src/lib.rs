@@ -47,12 +47,12 @@ pub type Fr = Fp256<MontBackend<FrConfig, 4>>;
 use lazy_static::lazy_static;
 
 lazy_static! {
-    static ref D: Fq = Fq::from_str("168696").unwrap();
-    static ref D_BIG: BigInt = D.into_bigint();
-    static ref A: Fq = Fq::from_str("168700").unwrap();
-    static ref A_BIG: BigInt = A.into_bigint();
-    static ref Q: BigInt = Fq::MODULUS;
-    static ref B8: Point = Point {
+    pub static ref D: Fq = Fq::from_str("168696").unwrap();
+    pub static ref D_BIG: BigInt = D.into_bigint();
+    pub static ref A: Fq = Fq::from_str("168700").unwrap();
+    pub static ref A_BIG: BigInt = A.into_bigint();
+    pub static ref Q: BigInt = Fq::MODULUS;
+    pub static ref B8: Point = Point {
         x: Fq::from_str(
             "5299619240641551281634865583518297030282874472190772894086521144482721001553",
         )
@@ -62,11 +62,15 @@ lazy_static! {
         )
         .unwrap(),
     };
-    static ref ORDER: Fq = Fq::from_str(
+    pub static ref ORDER: Fq = Fq::from_str(
         "21888242871839275222246405745257275088614511777268538073601725287587578984328",
     )
     .unwrap();
     static ref POSEIDON: poseidon_ark::Poseidon = Poseidon::new();
+}
+
+pub fn generator() -> Point {
+    B8.clone()
 }
 
 #[derive(Clone, Debug)]
